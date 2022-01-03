@@ -28,6 +28,7 @@ jobs:
   build:
     runs-on: macos-11
     steps:
+    - uses: actions/checkout@v2
     - name: Make directory for build
       run: mkdir build
     - name: Run CMake
