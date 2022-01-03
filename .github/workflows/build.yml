@@ -29,9 +29,11 @@ jobs:
     runs-on: macos-11
     steps:
     - name: Make directory for build
-      run: mkdir build; cd build
+      run: mkdir build
     - name: Run CMake
+      working-directory: ./build
       run: cmake ..
     - name: Run GNU Make
+      working-directory: ./build
       run: make
 
