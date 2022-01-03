@@ -1,0 +1,49 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+# Help VS Code choose the right YAML schema, see also "Hammerkit yaml schema
+# picked up instead of Github actions"
+# https://github.com/redhat-developer/vscode-yaml/issues/565
+
+# In the early stages of the project, I would only support macOS (because I only
+# use this OS), so CI is also for macOS only. See "macOS-latest workflows will
+# use macOS-11" https://github.com/actions/virtual-environments/issues/4060.
+# I'm currently using `macos-11`, and I may need to update to `macos-latest` in
+# a few days.
+#
+# Here is the environment I used:
+#
+# - Clang/LLVM 13.0.0 (is default)
+# - Cmake 3.22.1
+#
+# See:
+# - "GitHub Actions Virtual Environments"
+#   https://github.com/actions/virtual-environments
+# - "macOS 11.6 info"
+#   https://github.com/actions/virtual-environments/blob/main/images/macos/macos-11-Readme.md
+# for more details.
+
+name: CMake Build Shinkai JVM
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: macos-11
+    steps:
+    # This action checks-out the repository under $GITHUB_WORKSPACE, so
+    # workflow can access it. Do not forget it.
+    # See "Checkout V2" https://github.com/actions/checkout
+    - name: Check out repository
+      uses: actions/checkout@v2
+
+    - name: Create build directory and run CMake
+      # cmake
+      #   -S <path-to-source>   Explicitly specify a source directory.
+      #   -B <path-to-build>    Explicitly specify a build directory.
+      #   -G <generator-name>   Specify a build system generator.
+      run: cmake -S . -B build -G "Unix Makefiles"
+      #                           ^^^^^^^^^^^^^^^^ TBD: Change to "Ninja" later.
+
+    - name: Run GNU Make, build project
+      # cmake
+      #   --build <dir>         Build a CMake-generated project binary tree.
+      run: cmake --build build
+
