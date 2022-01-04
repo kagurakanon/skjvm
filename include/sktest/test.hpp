@@ -89,7 +89,6 @@ namespace sktest {
 #ifdef USE_SKTEST_DEFAULT_MAIN_FUNCTION
 int main(int argc, char **argv) {
   sktest::RegistryHub::get_immutable().invoke_all_tests();
-  return 0;
 }
 #endif
 
@@ -101,5 +100,11 @@ int main(int argc, char **argv) {
   } \
   static void sktest_##__LINE__()
 #endif
+
+#define REQUIRE(expr) \
+  if (!(expr)) { \
+    printf("%s:%d: REQUIRE(%s) failed\n", __FILE__, __LINE__, #expr); \
+    exit(1); \
+  }
 
 #endif /* _sktest_test_hpp */
