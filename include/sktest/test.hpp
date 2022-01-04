@@ -74,6 +74,15 @@ namespace sktest {
       return *get_instance_pointer();
     }
   };
+
+  // Register a test case while initalizing.
+  class Registrar {
+   public:
+    Registrar(char const *name, void(*test)()) noexcept {
+      RegistryHub::get_mutable().register_test(TestCase(name, test));
+    }
+    ~Registrar() noexcept = default;
+  };
 } // namespace sktest
 
 // Let SkTest provide the main function.
@@ -82,6 +91,15 @@ int main(int argc, char **argv) {
   sktest::RegistryHub::get_immutable().invoke_all_tests();
   return 0;
 }
+#endif
+
+#ifndef TEST_CASE
+#define TEST_CASE(name) \
+  static void sktest_##__LINE__(); \
+  namespace { \
+    sktest::Registrar sktest_test_case_##__LINE__(#name, &sktest_##__LINE__); \
+  } \
+  static void sktest_##__LINE__()
 #endif
 
 #endif /* _sktest_test_hpp */
