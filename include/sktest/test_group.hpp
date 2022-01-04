@@ -27,11 +27,25 @@ namespace sktest {
     char const *description;
     TestInfo info;
     void(*test_function)();
+
+    // statistical information
+    bool is_passed;
+    size_t total_assertion_count;
+    size_t passed_assertion_count;
    public:
     TestGroup(char const *description, void(*test_function)(),
               char const *file_name, size_t line_number) noexcept
       : description(description), test_function(test_function),
-        info(file_name, line_number) {};
+        info(file_name, line_number), is_passed(true),
+        total_assertion_count(0), passed_assertion_count(0) {};
+
+    auto add_assertion(bool passed) noexcept {
+      if (passed)
+        ++passed_assertion_count;
+      else
+        is_passed = false;
+      ++total_assertion_count;
+    }
 
     [[nodiscard]] auto get_description() const -> char const * {
       return description;
@@ -43,6 +57,21 @@ namespace sktest {
 
     [[nodiscard]] auto get_line_number() const -> size_t {
       return info.get_line_number();
+    }
+
+    [[nodiscard]]
+    auto all_assertion_passed() const -> bool {
+      return is_passed;
+    }
+
+    [[nodiscard]]
+    auto get_total_assertion_count() const -> size_t {
+      return total_assertion_count;
+    }
+
+    [[nodiscard]]
+    auto get_passed_assertion_count() const -> size_t {
+      return passed_assertion_count;
     }
 
     void invoke() const {

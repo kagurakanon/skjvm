@@ -10,8 +10,8 @@
 
 // Let SkTest provide the main function.
 #ifdef USE_SKTEST_DEFAULT_MAIN_FUNCTION
-int main(int argc, char **argv) {
-  sktest::RegistrationCenter::get_immutable().invoke_all_tests();
+int main(int _argc, char **_argv) {
+  return sktest::RegistrationCenter::get_mutable().invoke_tests();
 }
 #endif
 
