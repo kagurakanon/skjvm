@@ -1,5 +1,6 @@
 add_executable(test
-  example/example_main.cpp
-  example/example_1.cpp
-  example/example_2.cpp
+  example/main.cpp
+  example/test_integer.cpp
+  example/test_floating_point.cpp
+  example/test_string.cpp
 )

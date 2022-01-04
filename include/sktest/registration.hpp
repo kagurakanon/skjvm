@@ -27,6 +27,10 @@ namespace sktest {
 
     static constexpr size_t default_capacity = 16;
 
+    auto sort_tests() -> void {
+      qsort(test_groups, size, sizeof(TestGroup), &compare_test_groups);
+    }
+
    public:
     RegistrationCenter() noexcept
       : test_groups(nullptr), size(0), capacity(default_capacity) {
@@ -71,8 +75,10 @@ namespace sktest {
   /// idiomatic way to performing registration code in global scope.
   class Registrar {
    public:
-    Registrar(char const *name, void(*test)()) noexcept {
-      RegistrationCenter::get_mutable().register_test(TestGroup(name, test));
+    Registrar(char const *name, void(*test)(),
+              char const *file_name, size_t line_number) noexcept {
+      TestGroup group(name, test, file_name, line_number);
+      RegistrationCenter::get_mutable().register_test(group);
     }
     ~Registrar() noexcept = default;
   };

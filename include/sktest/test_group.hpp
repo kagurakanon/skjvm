@@ -2,6 +2,7 @@
 #define _sktest_test_group_hpp
 
 #include <stddef.h>
+#include <string.h>
 
 namespace sktest {
   struct TestInfo {
@@ -23,24 +24,56 @@ namespace sktest {
   /// by \c test_group macro. You should not use this struct directly.
   struct TestGroup {
    private:
-    char const *name;
+    char const *description;
+    TestInfo info;
     void(*test_function)();
    public:
-    TestGroup(char const *name, void(*test_function)()) noexcept
-      : name(name), test_function(test_function) {};
-    void invoke() const { test_function(); }
+    TestGroup(char const *description, void(*test_function)(),
+              char const *file_name, size_t line_number) noexcept
+      : description(description), test_function(test_function),
+        info(file_name, line_number) {};
+
+    [[nodiscard]] auto get_description() const -> char const * {
+      return description;
+    }
+
+    [[nodiscard]] auto get_file_name() const -> char const * {
+      return info.get_file_name();
+    }
+
+    [[nodiscard]] auto get_line_number() const -> size_t {
+      return info.get_line_number();
+    }
+
+    void invoke() const {
+      test_function();
+    }
   };
+
+  /// \c TestGroup comparison operators for \c qsort.
+  static int compare_test_groups(void const *left, void const *right) {
+    TestGroup const *lhs = (TestGroup *)left;
+    TestGroup const *rhs = (TestGroup *)right;
+
+    int compare_name = strcmp(lhs->get_file_name(), rhs->get_file_name());
+    if (compare_name != 0)
+      return compare_name;
+    else
+      return int(lhs->get_line_number()) - int(rhs->get_line_number());
+  }
 } // namespace sktest
 
 #ifndef test_group
 
 #define sktest_name_mangling(name, line) name##line
-#define sktest_test_group_impl(description, line)                              \
+#define sktest_test_group_impl(description, line, file)                        \
   static void sktest_name_mangling(sktest_, line)();                           \
   namespace {                                                                  \
     sktest::Registrar sktest_name_mangling(sktest_registrar, line) (           \
       description,                                                             \
-      &sktest_name_mangling(sktest_, line)                                     \
+      &sktest_name_mangling(sktest_, line),                                    \
+      file,                                                                    \
+      size_t(line)                                                             \
     );                                                                         \
   }                                                                            \
   static void sktest_name_mangling(sktest_, line)()
@@ -71,7 +104,8 @@ namespace sktest {
 ///
 /// \param description Description for the test group. It better be a string
 /// literal, I haven't checked memory safety for other situations.
-#define test_group(description) sktest_test_group_impl(description, __LINE__)
+#define test_group(description)                                                \
+  sktest_test_group_impl(description, __LINE__, __FILE__)
 
 #endif // test_group
 
