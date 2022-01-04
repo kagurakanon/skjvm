@@ -59,7 +59,7 @@ namespace sktest {
 /// }
 /// \endcode
 ///
-/// Note that \c test_group is a keyword-like macro (looks like `if`, `for`,
+/// Note that \c test_group is a keyword-like macro (looks like \c if, \c for,
 /// etc.), you should consider leaving a space before the parentheses.
 ///
 /// \code

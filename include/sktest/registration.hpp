@@ -52,12 +52,14 @@ namespace sktest {
       }
     }
 
-    // Get the const reference of the singleton instance of the registry hub.
+    /// Get the const reference of the singleton instance of the
+    /// \c RegistrationCenter.
     static auto get_immutable() -> RegistrationCenter const & {
       return *get_instance_pointer();
     }
 
-    // Get the singleton instance of the registry hub with a mutable reference.
+    /// Get the singleton instance of the \c RegistrationCenter with a mutable
+    /// reference.
     static auto get_mutable() -> RegistrationCenter & {
       return *get_instance_pointer();
     }
