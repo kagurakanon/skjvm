@@ -34,16 +34,16 @@ namespace sktest {
 
 #ifndef test_group
 
-#define _sktest_name_mangling(name, line) name##line
-#define _sktest_test_group_impl(description, line)                             \
-  static void _sktest_name_mangling(_sktest_, line)();                         \
+#define sktest_name_mangling(name, line) name##line
+#define sktest_test_group_impl(description, line)                              \
+  static void sktest_name_mangling(sktest_, line)();                           \
   namespace {                                                                  \
-    sktest::Registrar _sktest_name_mangling(_sktest_registrar, line) (         \
+    sktest::Registrar sktest_name_mangling(sktest_registrar, line) (           \
       description,                                                             \
-      &_sktest_name_mangling(_sktest_, line)                                   \
+      &sktest_name_mangling(sktest_, line)                                     \
     );                                                                         \
   }                                                                            \
-  static void _sktest_name_mangling(_sktest_, line)()
+  static void sktest_name_mangling(sktest_, line)()
 
 
 // `__LINE__` is used to generate unique identifiers for each test group. Each
@@ -71,7 +71,7 @@ namespace sktest {
 ///
 /// \param description Description for the test group. It better be a string
 /// literal, I haven't checked memory safety for other situations.
-#define test_group(description) _sktest_test_group_impl(description, __LINE__)
+#define test_group(description) sktest_test_group_impl(description, __LINE__)
 
 #endif // test_group
 
