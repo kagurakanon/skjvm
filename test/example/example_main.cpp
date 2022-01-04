@@ -2,8 +2,7 @@
 #define USE_SKTEST_DEFAULT_MAIN_FUNCTION
 #include <sktest/test.hpp>
 
-#include <stdio.h>
-
-TEST_CASE("hello_world_main") {
-    printf("Hello, world!\n");
+test_group ("test operator '+' for integer type") {
+  require(1 + 1 != 2, "1 + 1 does not equal 2");
+  require(2 + 2 != 4, "2 + 2 does not equal 4");
 }

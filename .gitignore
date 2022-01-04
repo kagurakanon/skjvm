@@ -3,4 +3,9 @@
 
 # VS Code
 /build
+/.vscode
 /.cache
+
+# CLion
+/.idea
+/cmake-build-debug
