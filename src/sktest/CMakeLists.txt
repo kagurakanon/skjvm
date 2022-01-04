@@ -1,0 +1,1 @@
+add_library(sktest test.cpp)
