@@ -1,27 +1,37 @@
 #ifndef sktest_test_group_hpp
 #define sktest_test_group_hpp
 
-#include <stddef.h>
-#include <string.h>
+#include <stddef.h> // NOLINT
+#include <string.h> // NOLINT
 
 namespace sktest {
+
   struct TestInfo {
    private:
     char const *file_name;
     size_t line_number;
+
    public:
     TestInfo(char const *file_name, size_t line_number) noexcept
       : file_name(file_name), line_number(line_number) {}
 
-    [[nodiscard]] char const *get_file_name() const { return file_name; }
-    [[nodiscard]] size_t get_line_number() const { return line_number; }
+    [[nodiscard]]
+    auto get_file_name() const -> char const * {
+      return file_name;
+    }
+
+    [[nodiscard]]
+    auto get_line_number() const -> size_t {
+      return line_number;
+    }
   };
 
   /// \brief The basic test collection in SkTest.
   ///
-  /// A \c TestGroup is actually a invokable function that contains a set of
-  /// tests. The tests can be automatically registered to \c RegistrationCenter
-  /// by \c test_group macro. You should not use this struct directly.
+  /// \details A \c TestGroup is actually a invokable function that contains a
+  /// set of tests. The tests can be automatically registered to
+  /// \c RegistrationCenter by \c test_group macro. You should not use this
+  /// struct directly.
   struct TestGroup {
    private:
     char const *description;
@@ -32,6 +42,7 @@ namespace sktest {
     bool is_passed;
     size_t total_assertion_count;
     size_t passed_assertion_count;
+
    public:
     TestGroup(char const *description, void(*test_function)(),
               char const *file_name, size_t line_number) noexcept
@@ -40,11 +51,12 @@ namespace sktest {
         total_assertion_count(0), passed_assertion_count(0) {};
 
     auto add_assertion(bool passed) noexcept {
-      if (passed)
-        ++passed_assertion_count;
-      else
+      if (passed) {
+        passed_assertion_count += 1;
+      } else {
         is_passed = false;
-      ++total_assertion_count;
+      }
+      total_assertion_count += 1;
     }
 
     [[nodiscard]] auto get_description() const -> char const * {
@@ -80,15 +92,15 @@ namespace sktest {
   };
 
   /// \c TestGroup comparison operators for \c qsort.
-  static int compare_test_groups(void const *left, void const *right) {
+  static auto compare_test_groups(void const *left, void const *right) -> int {
     TestGroup const *lhs = (TestGroup *)left;
     TestGroup const *rhs = (TestGroup *)right;
 
     int compare_name = strcmp(lhs->get_file_name(), rhs->get_file_name());
-    if (compare_name != 0)
+    if (compare_name != 0) {
       return compare_name;
-    else
-      return int(lhs->get_line_number()) - int(rhs->get_line_number());
+    }
+    return int(lhs->get_line_number()) - int(rhs->get_line_number());
   }
 } // namespace sktest
 

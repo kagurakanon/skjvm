@@ -2,9 +2,9 @@
 // and the latter is part of the C++ standard library, which is usually a better
 // choice. However, I prefer not to use (and link) STL, so I'm using the former
 // instead here.
-#include <stdio.h>
+#include <stdio.h> // NOLINT
 
-int main() {
+auto main() -> int {
   printf("Hello, world!\n");
   return 0;
 }

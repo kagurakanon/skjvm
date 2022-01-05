@@ -39,8 +39,8 @@
 #ifndef sktest_test_hpp
 #define sktest_test_hpp
 
-#include <stddef.h>
-#include <stdlib.h>
+#include <stddef.h> // NOLINT
+#include <stdlib.h> // NOLINT
 
 #include <sktest/registration.hpp>
 #include <sktest/test_group.hpp>
@@ -49,9 +49,10 @@
 // Let SkTest provide the main function if "USE_SKTEST_DEFAULT_MAIN_FUNCTION" is
 // defined.
 #ifdef USE_SKTEST_DEFAULT_MAIN_FUNCTION
-int main(int _argc, char **_argv) {
+int main/* NOLINT */([[maybe_unused]] int _argc,
+                     [[maybe_unused]] char **_argv) {
   return sktest::RegistrationCenter::get_mutable().invoke_tests();
 }
 #endif
 
-#endif /* _sktest_test_hpp */
+#endif /* sktest_test_hpp */
