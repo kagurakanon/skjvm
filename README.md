@@ -1,6 +1,13 @@
 Shinkai JVM
 ===========
 
+![CI: CMake Build Shinkai JVM][ci]
+[![License: Unlicense][unlicense]](http://unlicense.org/)
+
+[ci]: https://github.com/kkshinkai/skjvm/actions/workflows/build.yml/badge.svg
+[unlicense]: https://img.shields.io/badge/license-Unlicense-orange.svg
+
+
 > **WIP:** This project is still in early development.
 
 Shinkai JVM is an experimental Java compiler and Java virtual machine (JVM)
