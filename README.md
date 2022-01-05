@@ -44,28 +44,27 @@ chmod +x ./build.sh
 Goals
 -----
 
-Here are the main goals:
+Here are the main goals of Shinkai JVM:
 
-- Implement a largely specifications-compliant Java virtual machine. The basic
-  features of Java 8 will be implemented, but explicitly except for the handling
-  of Jars (aka. Zip files).
-- Implement a Java-like language compiler (perhaps a reduced version of Swift)
-  that generates JVM bytecode.
-- Implement a set of portable garbage collectors based on different garbage
-  collection algorithms.
+- [ ] A largely specifications-compliant Java virtual machine (JVM). The most
+  features of Java 8 will be implemented, except for the Jar (aka. Zip)
+  handling, because I don't want to introduce the Zip library dependencies;
+- [ ] A Java-like language compiler that generates JVM bytecode;
+- [ ] A set of research-purposes garbage collectors;
 
 However, this project is not just about Java, but also contains some additional
-works:
+works as follows:
 
-- A low-level C++ collection template library, include dynamic array, hash
-  table, linked list, tuples, maybe type, either type, etc. and related
-  algorithms, without using STL.
-- A minimal Unicode string library (not the ICU kind) that provide only some
-  basic Unicode operations.
-- An efficient language support library. Provide some common low-level tools
-  like tagged union pointer, smart pointers, etc.
-- A cross-platform wrapper for various operating systems, including macOS,
-  Linux, and Windows. Provide basic I/O support, threading, file system, etc.
+- [x] A minimalist testing framework (Done, see also
+  [SkTest](./include/sktest/test.hpp));
+- [ ] A low-level C++ core library, include collections, smart pointers, and
+  other utilities, without using STL;
+- [ ] A small Unicode string library (not as fully functional as ICU) that
+  provide basic Unicode operations.
+- [ ] A wrapper for various operating systems, including macOS (BSD), Linux, and
+  Windows. Provide I/O support, threading, file system, etc.
+
+The Shinkai JVM does not link to the C++ standard library, as an experiment.
 
 License
 -------
