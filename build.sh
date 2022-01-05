@@ -1,26 +1,26 @@
 #!/usr/bin/env bash
 
 # Font styles
-red=`tput setaf 1`
-green=`tput setaf 2`
-yellow=`tput setaf 3`
-blue=`tput setaf 4`
-bold=`tput bold`
-reset=`tput sgr0`
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)
+blue=$(tput setaf 4)
+bold=$(tput bold)
+reset=$(tput sgr0)
 
 # Badges
 info="${bold}${blue}[$0 info]${reset}"
-success="${bold}${green}[$0 succ]${reset}"
-warning="${bold}${yellow}[$0 warn]${reset}"
-error="${bold}${red}[$0 erro]${reset}"
+success="${bold}${green}[$0 success]${reset}"
+warning="${bold}${yellow}[$0 warning]${reset}"
+error="${bold}${red}[$0 error]${reset}"
 
 function help {
   echo -e "usage: ${bold}$0 <command>${reset}"
   echo -e "  where command include:"
-  echo -e "  • build       build the project with CMake and GNU Make"
-  echo -e "  • test        run tests (unimplemented)"
-  echo -e "  • clean       clean the project"
-  echo -e "  • help        show this help"
+  echo -e "    build       build the project with CMake and GNU Make"
+  echo -e "    test        run tests (unimplemented)"
+  echo -e "    clean       clean the project"
+  echo -e "    help        show this help"
 }
 
 if [[ $# != 1 ]]; then
