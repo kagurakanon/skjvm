@@ -59,6 +59,17 @@ namespace sktest {
 #endif
 
 #ifndef require
+
+/// \brief Creates an assertion that the expression is true.
+///
+/// \example The assertion can have a description, which will be printed on
+/// failure.
+/// \code
+/// test_group ("example test group") {
+///     require(1 == 1);
+///     require(1 == 2, "1 is not equal to 2");
+/// }
+/// \endcode
 #define require(...)                                                           \
   sktest_get_macro(__VA_ARGS__,                                                \
                    sktest_require_with_description,                            \
