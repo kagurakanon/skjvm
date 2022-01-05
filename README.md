@@ -7,7 +7,7 @@ written in modern C++, for research purposes only.
 Installation
 ------------
 
-> \[&#x2139;\] Currently only macOS Monterey and macOS Bir Sur are supported.
+> \[Note\] Currently only macOS Monterey and macOS Bir Sur are supported.
 > We will support other OS when the project is more mature. The planned list
 > includes older macOS, Windows 10/11, and Linux (in particular, Debian).
 
