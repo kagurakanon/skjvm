@@ -77,9 +77,9 @@ namespace sktest {
       }
 
       if (passed_assertion_count == total_assertion_count)
-        printf(BOLD_GREEN "test passed:" RESET "\n");
+        printf(bold_green("test passed:") "\n");
       else
-        printf(BOLD_RED "tests failed:" RESET "\n");
+        printf(bold_red("tests failed:") "\n");
 
       constexpr unsigned int bar_width = 35;
       double pass_rate = double(passed_assertion_count)
@@ -104,16 +104,14 @@ namespace sktest {
       printf("%.0f%%\n", pass_rate * 100);
 
       #define STATISTICAL_INFORMATION                                          \
-        GREEN "%zu passed" RESET ", "                                          \
-        RED   "%zu failed" RESET ", "                                          \
-              "%zu total"  RESET "\n"                                          \
+        green("%zu passed") ", " red("%zu failed") ", " "%zu total\n"
 
-      printf("  " BOLD "test group:" RESET "   " STATISTICAL_INFORMATION,
+      printf("  " bold("test group:") "   " STATISTICAL_INFORMATION,
              passed_test_group_count,
              total_test_group_count - passed_test_group_count,
              total_test_group_count);
 
-      printf("  " BOLD "assertion:" RESET "    " STATISTICAL_INFORMATION,
+      printf("  " bold("assertion:") "    " STATISTICAL_INFORMATION,
              passed_assertion_count,
              total_assertion_count - passed_assertion_count,
              total_assertion_count);

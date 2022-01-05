@@ -23,15 +23,15 @@ namespace sktest {
         description(description), expression(expression),
         file_name(file_name), line_number(line_number) {
       if (!has_passed) {
-        printf(BOLD_RED "error:" RESET " test failed at %s:%zu\n",
+        printf(bold_red("error:") " test failed at %s:%zu\n",
                file_name, line_number);
-        printf("  " BOLD "test group:" RESET "   %s\n",
-          RegistrationCenter::get_immutable().get_current_test_group()
-                                             .get_description());
-        printf("  " BOLD "expression:" RESET
-              "   require( " BLUE "%s" RESET " )\n", expression);
+        printf("  " bold("test group:") "   %s\n",
+               RegistrationCenter::get_immutable().get_current_test_group()
+                                                  .get_description());
+        printf("  " bold("expression:") "   require( " blue("%s") " )\n",
+               expression);
         if (strcmp(description, "") != 0)
-          printf("  " BOLD "description:" RESET "  %s\n", description);
+          printf("  " bold("description:") "  %s\n", description);
       }
       RegistrationCenter::get_mutable().get_current_test_group()
                                        .add_assertion(has_passed);
