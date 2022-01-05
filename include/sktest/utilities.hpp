@@ -9,10 +9,10 @@ namespace sktest {
   /// elements.
   class NonCopyable {
    public:
-    NonCopyable(NonCopyable const&)            = delete;
-    NonCopyable(NonCopyable &&)                = delete;
-    NonCopyable &operator=(NonCopyable const&) = delete;
-    NonCopyable &operator=(NonCopyable &&)     = delete;
+    NonCopyable(NonCopyable const&)                     = delete;
+    NonCopyable(NonCopyable &&)                         = delete;
+    auto operator=(NonCopyable const&) -> NonCopyable & = delete;
+    auto operator=(NonCopyable &&)     -> NonCopyable & = delete;
 
   protected:
     NonCopyable() noexcept = default;

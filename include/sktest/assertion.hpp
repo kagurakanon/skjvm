@@ -4,24 +4,15 @@
 #include <sktest/registration.hpp>
 #include <sktest/ansi_color.hpp>
 
-#include <stdio.h>
-#include <string.h>
+#include <stdio.h>  // NOLINT
+#include <string.h> // NOLINT
 
 namespace sktest {
   class Assertion {
-   private:
-    bool has_passed;
-    char const *description;
-    char const *expression;
-    char const *file_name;
-    size_t line_number;
    public:
-    Assertion(bool passed,
+    Assertion(bool has_passed,
               char const *description, char const *expression,
-              char const *file_name, size_t line_number)
-      : has_passed(passed),
-        description(description), expression(expression),
-        file_name(file_name), line_number(line_number) {
+              char const *file_name, size_t line_number) {
       if (!has_passed) {
         printf(bold_red("error:") " test failed at %s:%zu\n",
                file_name, line_number);
@@ -30,8 +21,9 @@ namespace sktest {
                                                   .get_description());
         printf("  " bold("expression:") "   require( " blue("%s") " )\n",
                expression);
-        if (strcmp(description, "") != 0)
+        if (strcmp(description, "") != 0) {
           printf("  " bold("description:") "  %s\n", description);
+        }
       }
       RegistrationCenter::get_mutable().get_current_test_group()
                                        .add_assertion(has_passed);

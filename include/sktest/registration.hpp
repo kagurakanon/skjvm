@@ -5,9 +5,9 @@
 #include <sktest/test_group.hpp>
 #include <sktest/ansi_color.hpp>
 
-#include <stddef.h>
-#include <stdio.h>
-#include <assert.h>
+#include <stddef.h> // NOLINT
+#include <stdio.h>  // NOLINT
+#include <assert.h> // NOLINT
 
 namespace sktest {
   /// \brief Registration center of all test groups.
@@ -17,15 +17,16 @@ namespace sktest {
   /// automatically.
   class RegistrationCenter : private NonCopyable {
    private:
-    TestGroup *test_groups;
-    size_t size;
+    TestGroup *test_groups{nullptr};
+    size_t size{0};
     size_t capacity;
-    size_t current_test_group;
+    size_t current_test_group{0};
 
     static auto get_instance_pointer() -> RegistrationCenter * {
       static RegistrationCenter *instance = nullptr;
-      if (instance == nullptr)
+      if (instance == nullptr) {
         instance = new RegistrationCenter();
+      }
       return instance;
     }
 
@@ -36,9 +37,7 @@ namespace sktest {
     }
 
    public:
-    RegistrationCenter() noexcept
-      : test_groups(nullptr), size(0), capacity(default_capacity),
-        current_test_group(0) {
+    RegistrationCenter() noexcept : capacity(default_capacity) {
       test_groups = (TestGroup *)malloc(sizeof(TestGroup) * capacity);
     }
 
@@ -55,8 +54,14 @@ namespace sktest {
       test_groups[size++] = group;
     }
 
+    [[maybe_unused]] // This is used in the main function, which is defined
+                     // with `USE_SKTEST_DEFAULT_MAIN_FUNCTION` macro. Static
+                     // analysis may misreport unused function errors, we use
+                     // `[[maybe_unused]]` attribute to suppress this warning.
     auto invoke_tests() -> int {
       assert(current_test_group == 0 && "cannot invoke tests more than once");
+
+      sort_tests();
 
       size_t total_test_group_count  = 0;
       size_t passed_test_group_count = 0;
@@ -67,8 +72,9 @@ namespace sktest {
         get_current_test_group().invoke();
 
         total_test_group_count += 1;
-        if (get_current_test_group().all_assertion_passed())
+        if (get_current_test_group().all_assertion_passed()) {
           passed_test_group_count += 1;
+        }
 
         total_assertion_count +=
           get_current_test_group().get_total_assertion_count();
@@ -76,49 +82,59 @@ namespace sktest {
           get_current_test_group().get_passed_assertion_count();
       }
 
-      if (passed_assertion_count == total_assertion_count)
-        printf(bold_green("test passed:") "\n");
-      else
-        printf(bold_red("tests failed:") "\n");
+      print_statistics(
+        total_test_group_count, passed_test_group_count,
+        total_assertion_count, passed_assertion_count);
 
-      constexpr unsigned int bar_width = 35;
+      return total_assertion_count == passed_assertion_count ? 0 : 1;
+    }
+
+    static auto print_statistics(size_t total_test_group_count,
+                          size_t passed_test_group_count,
+                          size_t total_assertion_count,
+                          size_t passed_assertion_count) -> void {
+      if (passed_assertion_count == total_assertion_count) {
+        puts(bold_green("test passed:"));
+      } else {
+        puts(bold_red("tests failed:"));
+      }
+
       double pass_rate = double(passed_assertion_count)
                     / // ------------------------------
                          double(total_assertion_count);
-      unsigned int red_bar_count = (1 - pass_rate) * bar_width;
 
-      // Red part of the bar should not be 0 if pass_rate is not exactly 1.
-      if (passed_assertion_count != total_assertion_count && red_bar_count == 0)
-        red_bar_count = 1;
+      constexpr unsigned int pass_rate_bar_width = 32;
 
-      unsigned int green_bar_count = bar_width - red_bar_count;
+      auto red_part_width =
+        (unsigned int)((1.0 - pass_rate) * double(pass_rate_bar_width));
 
-      printf("  [" GREEN);
-      for (auto i = 0; i < green_bar_count; ++i) { printf("="); }
-      printf(RESET);
+      // When the pass rate is close to but not equal to 1. `red_bar_count` may
+      // be equal to 0 after rounding, making it look like all the tests
+      // passed. We need to manually set `red_bar_count` to 1 in this case.
+      if (red_part_width == 0 and
+          passed_assertion_count != total_assertion_count) {
+        red_part_width = 1;
+      }
 
-      printf(RED);
-      for (auto i = 0; i < red_bar_count; ++i) { printf("="); }
-      printf(RESET "] ");
+      unsigned int green_part_width = pass_rate_bar_width - red_part_width;
 
-      printf("%.0f%%\n", pass_rate * 100);
+      constexpr int percentage_base = 100;
+      printf("  [" green("%.*s") red("%.*s") "] %.1f%%\n",
+             green_part_width, "========================================",
+             red_part_width,   "========================================",
+             pass_rate * percentage_base);
 
-      #define STATISTICAL_INFORMATION                                          \
-        green("%zu passed") ", " red("%zu failed") ", " "%zu total\n"
-
-      printf("  " bold("test group:") "   " STATISTICAL_INFORMATION,
+      printf("  " bold("test group:") "   "
+             green("%zu passed") ", " red("%zu failed") ", " "%zu total\n",
              passed_test_group_count,
              total_test_group_count - passed_test_group_count,
              total_test_group_count);
 
-      printf("  " bold("assertion:") "    " STATISTICAL_INFORMATION,
+      printf("  " bold("assertion:") "    "
+             green("%zu passed") ", " red("%zu failed") ", " "%zu total\n",
              passed_assertion_count,
              total_assertion_count - passed_assertion_count,
              total_assertion_count);
-
-      #undef STATISTICAL_INFORMATION
-
-      return total_assertion_count == passed_assertion_count ? 0 : 1;
     }
 
     [[nodiscard]]
