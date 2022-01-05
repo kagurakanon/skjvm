@@ -1,5 +1,5 @@
-#ifndef _sktest_test_group_hpp
-#define _sktest_test_group_hpp
+#ifndef sktest_test_group_hpp
+#define sktest_test_group_hpp
 
 #include <stddef.h>
 #include <string.h>
@@ -138,4 +138,4 @@ namespace sktest {
 
 #endif // test_group
 
-#endif /* _sktest_test_group_hpp */
+#endif /* sktest_test_group_hpp */

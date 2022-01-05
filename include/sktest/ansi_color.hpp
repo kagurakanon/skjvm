@@ -1,5 +1,5 @@
-#ifndef _sktest_ansi_color_hpp
-#define _sktest_ansi_color_hpp
+#ifndef sktest_ansi_color_hpp
+#define sktest_ansi_color_hpp
 
 #define BOLD_RED "\033[31;1m"
 #define RED "\033[31m"
@@ -9,4 +9,4 @@
 #define BOLD "\033[1m"
 #define RESET "\033[0m"
 
-#endif /* _sktest_ansi_color_hpp */
+#endif /* sktest_ansi_color_hpp */

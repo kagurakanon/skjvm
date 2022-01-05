@@ -1,5 +1,5 @@
-#ifndef _sktest_utilities_hpp
-#define _sktest_utilities_hpp
+#ifndef sktest_utilities_hpp
+#define sktest_utilities_hpp
 
 namespace sktest {
   /// \brief Abstract class for non-copyable objects, delete copy constructor
@@ -20,4 +20,4 @@ namespace sktest {
   };
 }
 
-#endif /* _sktest_utilities_hpp */
+#endif /* sktest_utilities_hpp */

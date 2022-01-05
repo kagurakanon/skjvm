@@ -1,5 +1,5 @@
-#ifndef _sktest_test_hpp
-#define _sktest_test_hpp
+#ifndef sktest_test_hpp
+#define sktest_test_hpp
 
 #include <stddef.h>
 #include <stdlib.h>

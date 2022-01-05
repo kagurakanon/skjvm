@@ -1,5 +1,5 @@
-#ifndef _sktest_assertion_hpp
-#define _sktest_assertion_hpp
+#ifndef sktest_assertion_hpp
+#define sktest_assertion_hpp
 
 #include <sktest/registration.hpp>
 #include <sktest/ansi_color.hpp>
@@ -65,4 +65,4 @@ namespace sktest {
                    sktest_require_without_description)(__VA_ARGS__)
 #endif
 
-#endif /* _sktest_assertion_hpp */
+#endif /* sktest_assertion_hpp */

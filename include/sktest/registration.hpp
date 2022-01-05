@@ -1,5 +1,5 @@
-#ifndef _sktest_registration_hpp
-#define _sktest_registration_hpp
+#ifndef sktest_registration_hpp
+#define sktest_registration_hpp
 
 #include <sktest/utilities.hpp>
 #include <sktest/test_group.hpp>
@@ -103,22 +103,22 @@ namespace sktest {
 
       printf("%.0f%%\n", pass_rate * 100);
 
-      #define statistical_information                                          \
+      #define STATISTICAL_INFORMATION                                          \
         GREEN "%zu passed" RESET ", "                                          \
         RED   "%zu failed" RESET ", "                                          \
               "%zu total"  RESET "\n"                                          \
 
-      printf("  " BOLD "test group:" RESET "   " statistical_information,
+      printf("  " BOLD "test group:" RESET "   " STATISTICAL_INFORMATION,
              passed_test_group_count,
              total_test_group_count - passed_test_group_count,
              total_test_group_count);
 
-      printf("  " BOLD "assertion:" RESET "    " statistical_information,
+      printf("  " BOLD "assertion:" RESET "    " STATISTICAL_INFORMATION,
              passed_assertion_count,
              total_assertion_count - passed_assertion_count,
              total_assertion_count);
 
-      #undef statistical_information
+      #undef STATISTICAL_INFORMATION
 
       return total_assertion_count == passed_assertion_count ? 0 : 1;
     }
@@ -156,4 +156,4 @@ namespace sktest {
   };
 }
 
-#endif /* _sktest_registration_hpp */
+#endif /* sktest_registration_hpp */
