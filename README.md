@@ -2,7 +2,49 @@ Shinkai JVM
 ===========
 
 Shinkai JVM is an experimental Java compiler and Java virtual machine (JVM)
-written in modern C++, for research purposes only. Here are the main goals:
+written in modern C++, for research purposes only.
+
+Installation
+------------
+
+> \[&#x2139;\] Currently only macOS Monterey and macOS Bir Sur are supported.
+> We will support other OS when the project is more mature. The planned list
+> includes older macOS, Windows 10/11, and Linux (in particular, Debian).
+
+Environmental requirements:
+
+- [macOS](https://www.apple.com/macos/monterey/),
+  version &ge; 11.0, < 13;
+- [CMake](https://cmake.org),
+  version &ge; 3.20;
+- [GNU Make](https://www.gnu.org/software/make/),
+  version &ge; 3.0 (ignore it if you know how to use other build systems);
+- [Clang](https://clang.llvm.org)
+  Apple's distribution (aka. Apple Clang), version &ge; 13.0.0;
+
+Run the following script in shell:
+
+```shell
+git clone https://github.com/kkshinkai/skjvm.git
+cd skjvm
+
+cmake -S . -B build -G "Unix Makefiles"
+cmake --build build
+./build/bin/java
+```
+
+or use [`./build.sh`](./build.sh) directly.
+
+```shell
+chmod +x ./build.sh
+./build.sh build
+./build/bin/java
+```
+
+Goals
+-----
+
+Here are the main goals:
 
 - Implement a largely specifications-compliant Java virtual machine. The basic
   features of Java 8 will be implemented, but explicitly except for the handling
