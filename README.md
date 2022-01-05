@@ -66,3 +66,9 @@ works:
   like tagged union pointer, smart pointers, etc.
 - A cross-platform wrapper for various operating systems, including macOS,
   Linux, and Windows. Provide basic I/O support, threading, file system, etc.
+
+License
+-------
+
+This project is licensed under the terms of the Unlicense, see
+[LICENSE.txt](./LICENSE.txt) for details.
