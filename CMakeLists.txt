@@ -7,4 +7,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED on)
 
 add_compile_options(-nostdinc++)
 
-add_executable(java src/java/main.cpp)
+include_directories(include)
+add_subdirectory(src)
+add_subdirectory(test)

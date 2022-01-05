@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
-# Help VS Code choose the right YAML schema, see also "Hammerkit yaml schema
-# picked up instead of Github actions"
+# Help VS Code choose the right YAML schema, see also "HammerKit yaml schema
+# picked up instead of GitHub actions"
 # https://github.com/redhat-developer/vscode-yaml/issues/565
 
 # In the early stages of the project, I would only support macOS (because I only
