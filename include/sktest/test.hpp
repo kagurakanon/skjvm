@@ -39,8 +39,8 @@
 #ifndef sktest_test_hpp
 #define sktest_test_hpp
 
-#include <stddef.h> // NOLINT
-#include <stdlib.h> // NOLINT
+#include <cstddef>
+#include <cstdlib>
 
 #include <sktest/registration.hpp>
 #include <sktest/test_group.hpp>

@@ -4,9 +4,9 @@
 #include <sktest/utilities.hpp>
 #include <sktest/ansi_color.hpp>
 
-#include <stddef.h> // NOLINT
-#include <stdio.h>  // NOLINT
-#include <assert.h> // NOLINT
+#include <cstddef>
+#include <cstdio>
+#include <cassert>
 #include <vector>
 
 namespace sktest {

@@ -4,8 +4,8 @@
 #include <sktest/source_info.hpp>
 #include <sktest/assertion.hpp>
 
-#include <stddef.h> // NOLINT
-#include <string.h> // NOLINT
+#include <cstddef>
+#include <cstring>
 #include <vector>
 #include <cassert>
 

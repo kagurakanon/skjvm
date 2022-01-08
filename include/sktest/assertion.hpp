@@ -5,8 +5,8 @@
 #include <sktest/ansi_color.hpp>
 #include <sktest/source_info.hpp>
 
-#include <stdio.h>  // NOLINT
-#include <string.h> // NOLINT
+#include <cstdio>
+#include <cstring>
 
 namespace sktest {
   class TestGroup;
