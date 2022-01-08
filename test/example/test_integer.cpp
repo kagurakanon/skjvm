@@ -2,7 +2,7 @@
 
 test_group ("test addition operator for integer (`+`)") {
   assert_true(1 + 1 == 2);
-  assert_true(1 + 2 == 3);
+  assert_true(1 + 1 == 3);
   assert_true(2 + 2 == 4);
 }
 

@@ -94,12 +94,14 @@ namespace sktest {
     }
 
     [[nodiscard]]
-    auto get_current_test_group() -> TestGroup & {
-      return test_groups[current_test_group];
+    static auto get_current_test_group() -> TestGroup & {
+      auto current_test_group = get_immutable().current_test_group;
+      return get_mutable().test_groups[current_test_group];
     }
 
     /// Get the const reference of the singleton instance of the
     /// \c RegistrationCenter.
+    [[nodiscard]]
     static auto get_immutable() -> const RegistrationCenter & {
       return *get_instance_pointer();
     }

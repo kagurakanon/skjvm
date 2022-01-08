@@ -12,27 +12,33 @@ namespace sktest {
   class TestGroup;
 
   class Assertion {
-   private:
+   protected:
     bool passed;
     char const *description;
     const SourceInfo info;
+    const TestGroup &test_group;
 
    public:
     Assertion(bool passed, char const *description,
               char const *file_name, size_t line_number)
       : passed(passed), description(description),
-        info(file_name, line_number) {}
+        info(file_name, line_number),
+        test_group(RegistrationCenter::get_current_test_group()) {}
 
     virtual ~Assertion() = default;
 
-    virtual auto print_report_if_failed() -> void {} // = 0;
+    virtual auto print_report_if_failed() const -> void {} // = 0;
 
-    auto register_to(TestGroup &test_group) -> void; // NO NEED!
     auto submit_to_registration_center() -> Assertion &;
 
     [[nodiscard]]
     auto has_passed() const -> bool {
       return passed;
+    }
+
+    [[nodiscard]]
+    auto get_test_group() const -> const TestGroup & {
+      return test_group;
     }
 
     [[nodiscard]]
@@ -52,24 +58,26 @@ namespace sktest {
   };
 
   class BooleanAssertion : public Assertion {
-   private:
-    const char *expression;
+   protected:
+    const char *condition;
    public:
-    BooleanAssertion(bool passed, const char *expression,
+    BooleanAssertion(bool passed, const char *condition,
                     const char *description,
                     const char *file_name, size_t line_number)
       : Assertion(passed, description, file_name, line_number),
-        expression(expression) {}
+        condition(condition) {}
 
     [[nodiscard]]
-    auto get_expression() const -> const char * {
-      return expression;
+    auto get_condition() const -> const char * {
+      return condition;
     }
   };
 
   class IsTrueAssertion : public BooleanAssertion {
    public:
     using BooleanAssertion::BooleanAssertion;
+
+    auto print_report_if_failed() const -> void override;
   };
 
   class IsFalseAssertion : public BooleanAssertion {
@@ -78,7 +86,7 @@ namespace sktest {
   };
 
   class EquivalenceAssertion : public Assertion {
-   private:
+   protected:
     const char *left;
     const char *right;
    public:
