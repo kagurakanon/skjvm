@@ -17,16 +17,16 @@
 /// \details
 /// \code
 /// #define USE_SKTEST_DEFAULT_MAIN_FUNCTION
-/// #include <sktest/test.hpp>
+/// #include &lt;sktest/test.hpp>
 ///
 /// test_group ("test operator '+' for integer type") {
-///     require(1 + 1 == 2, "1 + 1 does not equal 2");
-///     require(2 + 2 == 4, "2 + 2 does not equal 4");
+///     assert_true(1 + 1 == 2, "1 + 1 does not equal 2");
+///     assert_true(2 + 2 == 4, "2 + 2 does not equal 4");
 /// }
 ///
 /// test_group ("test operator '-' for integer type") {
-///     require(2 - 1 == 1, "2 - 1 does not equal 1");
-///     require(4 - 2 == 4, "4 - 2 does not equal 2");
+///     assert_true(2 - 1 == 1, "2 - 1 does not equal 1");
+///     assert_true(4 - 2 == 4, "4 - 2 does not equal 2");
 /// }
 /// \endcode
 ///

@@ -84,8 +84,8 @@ namespace sktest {
 ///
 /// \code
 /// test_group ("test operator '+' for integer type") {
-///     require(1 + 1 == 2, "1 + 1 does not equal 2");
-///     require(2 + 2 == 4, "2 + 2 does not equal 4");
+///     assert_equal(1 + 1, 2, "1 + 1 does not equal 2");
+///     assert_equal(2 + 2, 4, "2 + 2 does not equal 4");
 /// }
 /// \endcode
 ///

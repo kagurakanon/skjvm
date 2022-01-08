@@ -143,8 +143,29 @@ namespace sktest {
     sktest_boolean_assert_with_description,                                    \
     sktest_boolean_assert_without_description)(__VA_ARGS__)
 
+/// \brief Creates an assertion that the expression is true.
+///
+/// \example The assertion can have a description, which will be printed on
+/// failure.
+/// \code
+/// test_group ("example test group") {
+///     assert_true(1 == 1);
+///     assert_true(1 == 2, "1 is not equal to 2");
+/// }
+/// \endcode
 #define assert_true(...)                                                       \
   sktest_boolean_assert(sktest::IsTrueAssertion, __VA_ARGS__)
+
+/// \brief Creates an assertion that the expression is false.
+///
+/// \example The assertion can have a description, which will be printed on
+/// failure.
+/// \code
+/// test_group ("example test group") {
+///     assert_false(1 == 2);
+///     assert_false(1 == 1, "1 is equal to 1");
+/// }
+/// \endcode
 #define assert_false(...)                                                      \
   sktest_boolean_assert(sktest::IsFalseAssertion, __VA_ARGS__)
 
@@ -166,20 +187,31 @@ namespace sktest {
     sktest_equal_assert_with_description,                                      \
     sktest_equal_assert_without_description)(__VA_ARGS__)
 
-#define assert_equal(...)                                                      \
-  sktest_equal_assert(sktest::AreEqualAssertion, ==, __VA_ARGS__)
-#define assert_not_equal(...)                                                  \
-  sktest_equal_assert(sktest::AreNotEqualAssertion, !=, __VA_ARGS__)
 
-/// \brief Creates an assertion that the expression is true.
+/// \brief Creates an assertion that two expressions are equal.
 ///
 /// \example The assertion can have a description, which will be printed on
 /// failure.
 /// \code
 /// test_group ("example test group") {
-///     require(1 == 1);
-///     require(1 == 2, "1 is not equal to 2");
+///     assert_equal(1, 1);
+///     assert_equal(1, 2, "1 is not equal to 2");
 /// }
 /// \endcode
+#define assert_equal(...)                                                      \
+  sktest_equal_assert(sktest::AreEqualAssertion, ==, __VA_ARGS__)
+
+/// \brief Creates an assertion that two expressions are not equal.
+///
+/// \example The assertion can have a description, which will be printed on
+/// failure.
+/// \code
+/// test_group ("example test group") {
+///     assert_not_equal(1, 2);
+///     assert_not_equal(1, 2, "1 is equal to 1");
+/// }
+/// \endcode
+#define assert_not_equal(...)                                                  \
+  sktest_equal_assert(sktest::AreNotEqualAssertion, !=, __VA_ARGS__)
 
 #endif /* sktest_assertion_hpp */
