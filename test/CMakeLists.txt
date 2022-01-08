@@ -4,3 +4,5 @@ add_executable(sktest-example
   example/test_floating_point.cpp
   example/test_string.cpp
 )
+
+target_link_libraries(sktest-example sktest)

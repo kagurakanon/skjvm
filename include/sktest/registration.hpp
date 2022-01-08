@@ -2,14 +2,16 @@
 #define sktest_registration_hpp
 
 #include <sktest/utilities.hpp>
-#include <sktest/test_group.hpp>
 #include <sktest/ansi_color.hpp>
 
 #include <stddef.h> // NOLINT
 #include <stdio.h>  // NOLINT
 #include <assert.h> // NOLINT
+#include <vector>
 
 namespace sktest {
+  class TestGroup;
+
   /// \brief Registration center of all test groups.
   ///
   /// This is a singleton class that is used to register all test groups. It
@@ -17,10 +19,8 @@ namespace sktest {
   /// automatically.
   class RegistrationCenter : private NonCopyable {
    private:
-    TestGroup *test_groups{nullptr};
-    size_t size{0};
-    size_t capacity;
-    size_t current_test_group{0};
+    std::vector<TestGroup> test_groups {};
+    size_t current_test_group {0};
 
     static auto get_instance_pointer() -> RegistrationCenter * {
       static RegistrationCenter *instance = nullptr;
@@ -32,67 +32,23 @@ namespace sktest {
 
     static constexpr size_t default_capacity = 16;
 
-    auto sort_tests() -> void {
-      qsort(test_groups, size, sizeof(TestGroup), &compare_test_groups);
-    }
+    auto sort_tests() -> void;
 
    public:
-    RegistrationCenter() noexcept : capacity(default_capacity) {
-      test_groups = (TestGroup *)malloc(sizeof(TestGroup) * capacity);
-    }
+    RegistrationCenter() noexcept = default;
 
-    ~RegistrationCenter() noexcept override {
-      free(test_groups);
-    }
-
-    auto register_test(TestGroup group) -> void {
-      if (size == capacity) {
-        capacity *= 2;
-        test_groups =
-            (TestGroup *)realloc(test_groups, sizeof(TestGroup) * capacity);
-      }
-      test_groups[size++] = group;
-    }
+    auto push_test_group(TestGroup group) -> void;
 
     [[maybe_unused]] // This is used in the main function, which is defined
                      // with `USE_SKTEST_DEFAULT_MAIN_FUNCTION` macro. Static
                      // analysis may misreport unused function errors, we use
                      // `[[maybe_unused]]` attribute to suppress this warning.
-    auto invoke_tests() -> int {
-      assert(current_test_group == 0 && "cannot invoke tests more than once");
+    auto invoke_tests() -> int;
 
-      sort_tests();
+    static auto print_statistics(
+      size_t total_test_group_count, size_t passed_test_group_count,
+      size_t total_assertion_count, size_t passed_assertion_count) -> void {
 
-      size_t total_test_group_count  = 0;
-      size_t passed_test_group_count = 0;
-      size_t total_assertion_count   = 0;
-      size_t passed_assertion_count  = 0;
-
-      for (; current_test_group < size; ++current_test_group) {
-        get_current_test_group().invoke();
-
-        total_test_group_count += 1;
-        if (get_current_test_group().all_assertion_passed()) {
-          passed_test_group_count += 1;
-        }
-
-        total_assertion_count +=
-          get_current_test_group().get_total_assertion_count();
-        passed_assertion_count +=
-          get_current_test_group().get_passed_assertion_count();
-      }
-
-      print_statistics(
-        total_test_group_count, passed_test_group_count,
-        total_assertion_count, passed_assertion_count);
-
-      return total_assertion_count == passed_assertion_count ? 0 : 1;
-    }
-
-    static auto print_statistics(size_t total_test_group_count,
-                          size_t passed_test_group_count,
-                          size_t total_assertion_count,
-                          size_t passed_assertion_count) -> void {
       if (passed_assertion_count == total_assertion_count) {
         puts(bold_green("test passed:"));
       } else {
@@ -138,13 +94,13 @@ namespace sktest {
     }
 
     [[nodiscard]]
-    auto get_current_test_group() const -> TestGroup & {
+    auto get_current_test_group() -> TestGroup & {
       return test_groups[current_test_group];
     }
 
     /// Get the const reference of the singleton instance of the
     /// \c RegistrationCenter.
-    static auto get_immutable() -> RegistrationCenter const & {
+    static auto get_immutable() -> const RegistrationCenter & {
       return *get_instance_pointer();
     }
 
@@ -162,10 +118,7 @@ namespace sktest {
   class Registrar {
    public:
     Registrar(char const *name, void(*test)(),
-              char const *file_name, size_t line_number) noexcept {
-      TestGroup group(name, test, file_name, line_number);
-      RegistrationCenter::get_mutable().register_test(group);
-    }
+              char const *file_name, size_t line_number) noexcept;
     ~Registrar() noexcept = default;
   };
 }

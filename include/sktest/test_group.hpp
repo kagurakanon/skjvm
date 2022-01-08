@@ -1,30 +1,15 @@
 #ifndef sktest_test_group_hpp
 #define sktest_test_group_hpp
 
+#include <sktest/source_info.hpp>
+#include <sktest/assertion.hpp>
+
 #include <stddef.h> // NOLINT
 #include <string.h> // NOLINT
+#include <vector>
+#include <cassert>
 
 namespace sktest {
-
-  struct TestInfo {
-   private:
-    char const *file_name;
-    size_t line_number;
-
-   public:
-    TestInfo(char const *file_name, size_t line_number) noexcept
-      : file_name(file_name), line_number(line_number) {}
-
-    [[nodiscard]]
-    auto get_file_name() const -> char const * {
-      return file_name;
-    }
-
-    [[nodiscard]]
-    auto get_line_number() const -> size_t {
-      return line_number;
-    }
-  };
 
   /// \brief The basic test collection in SkTest.
   ///
@@ -35,73 +20,46 @@ namespace sktest {
   struct TestGroup {
    private:
     char const *description;
-    TestInfo info;
+    SourceInfo info;
     void(*test_function)();
 
-    // statistical information
-    bool is_passed;
-    size_t total_assertion_count;
-    size_t passed_assertion_count;
+    std::vector<Assertion> assertions {};
 
    public:
     TestGroup(char const *description, void(*test_function)(),
               char const *file_name, size_t line_number) noexcept
       : description(description), test_function(test_function),
-        info(file_name, line_number), is_passed(true),
-        total_assertion_count(0), passed_assertion_count(0) {};
+        info(file_name, line_number) {};
 
-    auto add_assertion(bool passed) noexcept {
-      if (passed) {
-        passed_assertion_count += 1;
-      } else {
-        is_passed = false;
-      }
-      total_assertion_count += 1;
+    auto push_assertion(Assertion assertion) noexcept -> void {
+      assertions.push_back(std::move(assertion));
     }
 
-    [[nodiscard]] auto get_description() const -> char const * {
+    [[nodiscard]]
+    auto get_description() const -> char const * {
       return description;
     }
 
-    [[nodiscard]] auto get_file_name() const -> char const * {
-      return info.get_file_name();
-    }
-
-    [[nodiscard]] auto get_line_number() const -> size_t {
-      return info.get_line_number();
+    [[nodiscard]]
+    auto get_file() const -> char const * {
+      return info.get_file();
     }
 
     [[nodiscard]]
-    auto all_assertion_passed() const -> bool {
-      return is_passed;
+    auto get_line() const -> size_t {
+      return info.get_line();
     }
 
     [[nodiscard]]
-    auto get_total_assertion_count() const -> size_t {
-      return total_assertion_count;
-    }
-
-    [[nodiscard]]
-    auto get_passed_assertion_count() const -> size_t {
-      return passed_assertion_count;
+    auto get_assertions() const -> const std::vector<Assertion> & {
+      return assertions;
     }
 
     void invoke() const {
+      assert(assertions.empty() && "cannot invoke a test group more than once");
       test_function();
     }
   };
-
-  /// \c TestGroup comparison operators for \c qsort.
-  static auto compare_test_groups(void const *left, void const *right) -> int {
-    TestGroup const *lhs = (TestGroup *)left;
-    TestGroup const *rhs = (TestGroup *)right;
-
-    int compare_name = strcmp(lhs->get_file_name(), rhs->get_file_name());
-    if (compare_name != 0) {
-      return compare_name;
-    }
-    return int(lhs->get_line_number()) - int(rhs->get_line_number());
-  }
 } // namespace sktest
 
 #ifndef test_group
