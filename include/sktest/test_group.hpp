@@ -62,8 +62,6 @@ namespace sktest {
   };
 } // namespace sktest
 
-#ifndef test_group
-
 #define sktest_name_mangling(name, line) name##line
 #define sktest_test_group_impl(description, line, file)                        \
   static void sktest_name_mangling(sktest_, line)();                           \
@@ -105,7 +103,5 @@ namespace sktest {
 /// literal, I haven't checked memory safety for other situations.
 #define test_group(description)                                                \
   sktest_test_group_impl(description, __LINE__, __FILE__)
-
-#endif // test_group
 
 #endif /* sktest_test_group_hpp */

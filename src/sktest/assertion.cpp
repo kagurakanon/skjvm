@@ -14,8 +14,59 @@ namespace sktest {
     printf(bold_red("error:") " test failed at %s:%zu\n",
            info.get_file(), info.get_line());
     printf("  " bold("test group:") "   %s\n", test_group.get_description());
-
     printf("  " bold("condition:") "    assert_true( " blue("%s") " )\n",
            condition);
+
+    if (strcmp(description, "") != 0) {
+      printf("  " bold("description:") "  %s\n", description);
+    }
+  }
+
+  auto IsFalseAssertion::print_report_if_failed() const -> void {
+    if (has_passed()) { return; }
+
+    printf(bold_red("error:") " test failed at %s:%zu\n",
+           info.get_file(), info.get_line());
+    printf("  " bold("test group:") "   %s\n", test_group.get_description());
+    printf("  " bold("condition:") "    assert_true( " blue("%s") " )\n",
+           condition);
+
+    if (strcmp(description, "") != 0) {
+      printf("  " bold("description:") "  %s\n", description);
+    }
+  }
+
+  auto AreEqualAssertion::print_report_if_failed() const -> void {
+    if (has_passed()) { return; }
+
+    printf(bold_red("error:") " test failed at %s:%zu\n",
+           info.get_file(), info.get_line());
+    printf("  " bold("test group:") "   %s\n", test_group.get_description());
+    printf(
+      "  " bold("condition:") "    assert_equal(\n"
+      "                  left  = " blue("%s") " ,\n"
+      "                  right = " blue("%s") " ,\n"
+      "                )\n", left, right);
+
+    if (strcmp(description, "") != 0) {
+      printf("  " bold("description:") "  %s\n", description);
+    }
+  }
+
+  auto AreNotEqualAssertion::print_report_if_failed() const -> void {
+    if (has_passed()) { return; }
+
+    printf(bold_red("error:") " test failed at %s:%zu\n",
+           info.get_file(), info.get_line());
+    printf("  " bold("test group:") "   %s\n", test_group.get_description());
+    printf(
+      "  " bold("condition:") "    assert_not_equal(\n"
+      "                  left  = " blue("%s") " ,\n"
+      "                  right = " blue("%s") " ,\n"
+      "                )\n", left, right);
+
+    if (strcmp(description, "") != 0) {
+      printf("  " bold("description:") "  %s\n", description);
+    }
   }
 } // namespace sktest

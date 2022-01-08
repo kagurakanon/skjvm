@@ -7,9 +7,9 @@ namespace sktest {
     std::sort(test_groups.begin(), test_groups.end(), [](auto lhs, auto rhs) {
       int compare_name = strcmp(lhs.get_file(), rhs.get_file());
       if (compare_name != 0) {
-        return compare_name;
+        return compare_name < 0;
       }
-      return int(lhs.get_line()) - int(rhs.get_line());
+      return lhs.get_line() < rhs.get_line();
     });
   }
 

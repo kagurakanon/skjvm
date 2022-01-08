@@ -83,6 +83,8 @@ namespace sktest {
   class IsFalseAssertion : public BooleanAssertion {
    public:
     using BooleanAssertion::BooleanAssertion;
+
+    auto print_report_if_failed() const -> void override;
   };
 
   class EquivalenceAssertion : public Assertion {
@@ -110,11 +112,15 @@ namespace sktest {
   class AreEqualAssertion : public EquivalenceAssertion {
    public:
     using EquivalenceAssertion::EquivalenceAssertion;
+
+    auto print_report_if_failed() const -> void override;
   };
 
   class AreNotEqualAssertion : public EquivalenceAssertion {
    public:
     using EquivalenceAssertion::EquivalenceAssertion;
+
+    auto print_report_if_failed() const -> void override;
   };
 
 } // namespace sktest
@@ -137,26 +143,33 @@ namespace sktest {
     sktest_boolean_assert_with_description,                                    \
     sktest_boolean_assert_without_description)(__VA_ARGS__)
 
-#define assert_true(...) sktest_boolean_assert(sktest::IsTrueAssertion, __VA_ARGS__)
+#define assert_true(...)                                                       \
+  sktest_boolean_assert(sktest::IsTrueAssertion, __VA_ARGS__)
+#define assert_false(...)                                                      \
+  sktest_boolean_assert(sktest::IsFalseAssertion, __VA_ARGS__)
 
-#ifndef sktest_require_impl
-#define sktest_require_impl(expr, description, file, line)                     \
-  sktest::Assertion((expr), description, #expr, file, line)
-#endif
+#define sktest_overload_equivalence_assert(_1, _2, _3, _4, _5, name, ...) name
 
-#ifndef sktest_require_with_description
-#define sktest_require_with_description(expr, description)                     \
-  sktest_require_impl(expr, description, __FILE__, __LINE__)
-#endif
+#define sktest_equal_assert_with_description(kind, op, left, right, desc)      \
+  kind((left) op (right), #left, #right, desc, __FILE__, __LINE__)             \
+    .submit_to_registration_center()                                           \
+    .print_report_if_failed();
 
-#ifndef sktest_require_without_description
-#define sktest_require_without_description(expr)                               \
-  sktest_require_impl(expr, "", __FILE__, __LINE__)
-#endif
+#define sktest_equal_assert_without_description(kind, op, left, right)         \
+  kind((left) op (right), #left, #right, "", __FILE__, __LINE__)               \
+    .submit_to_registration_center()                                           \
+    .print_report_if_failed()
 
-#ifndef sktest_get_macro
-#define sktest_get_macro(_1, _2, name, ...) name
-#endif
+#define sktest_equal_assert(...)                                               \
+  sktest_overload_equivalence_assert(                                          \
+    __VA_ARGS__,                                                               \
+    sktest_equal_assert_with_description,                                      \
+    sktest_equal_assert_without_description)(__VA_ARGS__)
+
+#define assert_equal(...)                                                      \
+  sktest_equal_assert(sktest::AreEqualAssertion, ==, __VA_ARGS__)
+#define assert_not_equal(...)                                                  \
+  sktest_equal_assert(sktest::AreNotEqualAssertion, !=, __VA_ARGS__)
 
 /// \brief Creates an assertion that the expression is true.
 ///
