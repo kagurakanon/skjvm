@@ -68,4 +68,22 @@ namespace sktest {
                    sktest_require_without_description)(__VA_ARGS__)
 #endif
 
+#ifndef assert_true
+#define assert_true(expr) require(expr)
+#endif
+
+#ifndef assert_false
+#define assert_false(expr) require(!(expr))
+#endif
+
+#ifndef assert_equal
+#define assert_equal(expected, actual, ...)                                    \
+  require((expected) == (actual), __VA_ARGS__)
+#endif
+
+#ifndef assert_not_equal
+#define assert_not_equal(expected, actual, ...)                                \
+  require((expected) != (actual), __VA_ARGS__)
+#endif
+
 #endif /* sktest_assertion_hpp */
