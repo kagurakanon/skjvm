@@ -49,6 +49,12 @@ namespace sktest {
       size_t total_test_group_count, size_t passed_test_group_count,
       size_t total_assertion_count, size_t passed_assertion_count) -> void {
 
+      // Fix the divide-by-zero bug when statistics test results in #9
+      if (total_assertion_count == 0) {
+        puts(bold_green("no test found:") " process will exit with 0");
+        return;
+      }
+
       if (passed_assertion_count == total_assertion_count) {
         puts(bold_green("test passed:"));
       } else {
